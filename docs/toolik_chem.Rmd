@@ -1,0 +1,70 @@
+---
+title: "Toolik Chemistry"
+author: "Colleen McCamy"
+date: "2022-08-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+
+```{r}
+
+toolik_biochem <- read_csv(here::here("data", "2011_Kling_Akchem.csv"), na = c(".", "NA")) |> 
+  janitor::clean_names()
+
+```
+
+Create a subset of the data that contains only observations from the “Toolik Inlet” site, and that only contains the variables (columns) for pH, dissolved organic carbon (DOC), and total dissolved nitrogen (TDN) (hint: see dplyr::select()). Store this subset as inlet_biochem. Make sure to LOOK AT the subset you’ve created.
+
+```{r}
+
+toolik_biochem %>%
+  group_by(site) |> 
+  if (group == "Toolik Inlet"){
+    
+  }
+
+inlet_biochem <- toolik_biochem |> 
+  filter(site == "Toolik Inlet") |> 
+  select(p_h, doc_u_m, tdn_u_m)
+
+
+inlet_biochem
+```
+
+
+Find the mean value of each column in inlet_biochem 3 different ways:
+
+```{r}
+
+# using apply and map
+
+apply(X = inlet_biochem, MARGIN = 2, na.rm = TRUE, FUN = mean)
+
+map(.x = inlet_biochem, .f = mean)
+
+
+# using a for loop
+
+mean_ph <- vector(mode = "numeric", length = length(inlet_biochem))
+
+for (i in seq_along(inlet_biochem)){
+  mean_val <- mean(inlet_biochem[[1]], na.rm = TRUE)
+  mean_ph[i] <- mean_val
+}
+
+mean_ph
+
+
+```
+
